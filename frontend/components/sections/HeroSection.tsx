@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
+import ScrambleText from '../animations/ScrambleText';
 
 export default function HeroSection() {
     const ref = useRef(null);
@@ -14,34 +15,114 @@ export default function HeroSection() {
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
 
-    const [particles, setParticles] = useState<{ left: string; top: string; duration: number; delay: number }[]>([]);
+    // Three depth layers for parallax
+    const [particlesLayer1, setParticlesLayer1] = useState<{ left: string; top: string; duration: number; delay: number }[]>([]);
+    const [particlesLayer2, setParticlesLayer2] = useState<{ left: string; top: string; duration: number; delay: number }[]>([]);
+    const [particlesLayer3, setParticlesLayer3] = useState<{ left: string; top: string; duration: number; delay: number }[]>([]);
 
     useEffect(() => {
-        setParticles(
-            [...Array(10)].map(() => ({
+        // Far background layer (slowest, most blurred)
+        setParticlesLayer1(
+            [...Array(5)].map(() => ({
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                duration: 4 + Math.random() * 3,
+                delay: Math.random() * 2,
+            }))
+        );
+        
+        // Mid-ground layer
+        setParticlesLayer2(
+            [...Array(5)].map(() => ({
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 duration: 3 + Math.random() * 2,
                 delay: Math.random() * 2,
             }))
         );
+        
+        // Foreground layer (fastest, sharpest)
+        setParticlesLayer3(
+            [...Array(5)].map(() => ({
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                duration: 2 + Math.random() * 1.5,
+                delay: Math.random() * 2,
+            }))
+        );
     }, []);
+
+    // Different parallax speeds for each layer
+    const yLayer1 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);  // Slowest
+    const yLayer2 = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);  // Medium
+    const yLayer3 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);  // Fastest
 
     return (
         <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900">
-            {/* Animated background particles */}
-            <motion.div style={{ y }} className="absolute inset-0 overflow-hidden">
-                {particles.map((particle, i) => (
+            {/* Layer 1: Far background particles (slowest, most blurred) */}
+            <motion.div style={{ y: yLayer1 }} className="absolute inset-0 overflow-hidden">
+                {particlesLayer1.map((particle, i) => (
                     <motion.div
-                        key={i}
+                        key={`layer1-${i}`}
                         className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+                        style={{
+                            left: particle.left,
+                            top: particle.top,
+                            filter: 'blur(2px)',
+                            opacity: 0.3,
+                        }}
+                        animate={{
+                            y: [0, -30, 0],
+                            opacity: [0.2, 0.5, 0.2],
+                        }}
+                        transition={{
+                            duration: particle.duration,
+                            repeat: Infinity,
+                            delay: particle.delay,
+                        }}
+                    />
+                ))}
+            </motion.div>
+
+            {/* Layer 2: Mid-ground particles */}
+            <motion.div style={{ y: yLayer2 }} className="absolute inset-0 overflow-hidden">
+                {particlesLayer2.map((particle, i) => (
+                    <motion.div
+                        key={`layer2-${i}`}
+                        className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full"
+                        style={{
+                            left: particle.left,
+                            top: particle.top,
+                            filter: 'blur(1px)',
+                            opacity: 0.6,
+                        }}
+                        animate={{
+                            y: [0, -30, 0],
+                            opacity: [0.4, 0.8, 0.4],
+                        }}
+                        transition={{
+                            duration: particle.duration,
+                            repeat: Infinity,
+                            delay: particle.delay,
+                        }}
+                    />
+                ))}
+            </motion.div>
+
+            {/* Layer 3: Foreground particles (fastest, sharpest) */}
+            <motion.div style={{ y: yLayer3 }} className="absolute inset-0 overflow-hidden">
+                {particlesLayer3.map((particle, i) => (
+                    <motion.div
+                        key={`layer3-${i}`}
+                        className="absolute w-2 h-2 bg-cyan-400 rounded-full"
                         style={{
                             left: particle.left,
                             top: particle.top,
                         }}
                         animate={{
                             y: [0, -30, 0],
-                            opacity: [0.2, 0.8, 0.2],
+                            opacity: [0.6, 1, 0.6],
+                            scale: [1, 1.2, 1],
                         }}
                         transition={{
                             duration: particle.duration,
@@ -53,7 +134,7 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.div style={{ opacity }} className="relative z-10 text-center px-8 max-w-5xl">
-                {/* Tala Hologram */}
+                {/* 3ssila Hologram */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -81,7 +162,9 @@ export default function HeroSection() {
                     transition={{ duration: 0.8, delay: 0.5 }}
                     className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
                 >
-                    Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">3ssila</span>
+                    Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                        <ScrambleText text="3ssila" delay={800} scrambleDuration={1200} />
+                    </span>
                 </motion.h1>
 
                 <motion.p
@@ -90,7 +173,11 @@ export default function HeroSection() {
                     transition={{ duration: 0.8, delay: 0.7 }}
                     className="text-2xl md:text-3xl text-gray-300 mb-8"
                 >
-                    The Fearless AI Who Broke Language Barriers
+                    <ScrambleText 
+                        text="The Fearless AI Who Broke Language Barriers" 
+                        delay={1200} 
+                        scrambleDuration={1500}
+                    />
                 </motion.p>
 
                 <motion.div

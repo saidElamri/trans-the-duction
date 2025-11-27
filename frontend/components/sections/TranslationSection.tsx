@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Image from 'next/image';
+import ScrambleText from '../animations/ScrambleText';
 
 export default function TranslationSection() {
     const ref = useRef(null);
@@ -30,7 +31,9 @@ export default function TranslationSection() {
                         className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-8 min-w-[200px]"
                     >
                         <div className="text-sm text-gray-400 mb-2">English</div>
-                        <div className="text-2xl text-white font-semibold">Hello</div>
+                        <div className="text-2xl text-white font-semibold">
+                            <ScrambleText text="Hello" delay={300} scrambleDuration={600} />
+                        </div>
                     </motion.div>
 
                     {/* Arrow */}
@@ -51,7 +54,14 @@ export default function TranslationSection() {
                         className="bg-slate-800/50 backdrop-blur-sm border border-green-500/30 rounded-2xl p-8 min-w-[200px]"
                     >
                         <div className="text-sm text-gray-400 mb-2">French</div>
-                        <div className="text-2xl text-white font-semibold">Bonjour</div>
+                        <div className="text-2xl text-white font-semibold">
+                            <ScrambleText 
+                                text="Bonjour" 
+                                delay={800} 
+                                scrambleDuration={800}
+                                scrambleChars="àâäæçéèêëïîôùûüÿœÀÂÄÆÇÉÈÊËÏÎÔÙÛÜŸŒ"
+                            />
+                        </div>
                     </motion.div>
                 </div>
 

@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import ScrambleText from '../animations/ScrambleText';
 
 export default function ChallengeSection() {
     const ref = useRef(null);
@@ -27,11 +28,25 @@ export default function ChallengeSection() {
                 </motion.div>
 
                 <h2 className="text-4xl md:text-6xl font-bold text-white mb-8">
-                    The <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">Challenge</span>
+                    The <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">
+                        <ScrambleText text="Challenge" delay={300} scrambleDuration={800} />
+                    </span>
                 </h2>
 
                 <p className="text-2xl md:text-3xl text-gray-300 leading-relaxed">
-                    3ssila once struggled with <span className="text-blue-400 font-semibold">French</span> and <span className="text-blue-400 font-semibold">English</span>.
+                    <ScrambleText 
+                        text="3ssila once struggled with " 
+                        delay={500} 
+                        scrambleDuration={600}
+                    />
+                    <span className="text-blue-400 font-semibold">
+                        <ScrambleText text="French" delay={700} scrambleDuration={400} />
+                    </span>
+                    <ScrambleText text=" and " delay={800} scrambleDuration={200} />
+                    <span className="text-blue-400 font-semibold">
+                        <ScrambleText text="English" delay={900} scrambleDuration={400} />
+                    </span>
+                    <ScrambleText text="." delay={1000} scrambleDuration={100} />
                 </p>
                 <p className="text-xl text-gray-400 mt-6">
                     But the journey wasn't easy. 3ssila faced complex algorithms and data structures that seemed impossible to decipher.
