@@ -9,3 +9,16 @@ reports/
 coverage/
 dist/
 build/
+
+# Python
+venv/
+env/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary Scripts
+backend/test_*.py
+backend/check_token.py

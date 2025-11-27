@@ -1,5 +1,6 @@
 import requests
 import time
+import os
 
 class HFClient:
     def __init__(self):
@@ -14,7 +15,17 @@ class HFClient:
             raise ValueError("Invalid translation direction. Use 'fr-en' or 'en-fr'.")
         
         model_id = self.models[direction]
-        api_url = f"https://api-inference.huggingface.co/models/{model_id}"
+        
+        # Determine API URL from env or default
+        if direction == "en-fr":
+            api_url = os.getenv("MODEL_URL_EN_FR")
+        else:
+            api_url = os.getenv("MODEL_URL_FR_EN")
+
+        # Fallback to default construction if env var is missing or empty
+        if not api_url:
+            api_url = f"https://api-inference.huggingface.co/models/{model_id}"
+            
         headers = {"Authorization": f"Bearer {self.token}"}
         
         start_time = time.time()
