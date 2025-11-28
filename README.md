@@ -2,6 +2,17 @@
 
 A fullstack translation application using Next.js, FastAPI, PostgreSQL, and Hugging Face Inference API.
 
+## ✨ Features
+
+- **Lightweight Scroll Animations**: Optimized scroll-based animations for better performance
+  - Smooth fade-in and slide-up effects on sections
+  - Staggered reveals for enhanced visual appeal
+  - Performance-focused implementation with minimal overhead
+- **Modern UI/UX**: Dark sci-fi theme with glassmorphism effects
+- **Full-Stack Integration**: Seamless frontend-backend communication
+- **Secure Authentication**: JWT-based user authentication
+- **AI-Powered Translation**: Leveraging Hugging Face Inference API
+
 ## 🚀 Final Developer Guide
 
 ### How to run full stack
