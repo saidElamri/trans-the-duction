@@ -29,13 +29,17 @@ jobs:
     - name: Wait for Services
       run: |
         echo "Waiting for services..."
-        for i in {1..60}; do
+        for i in {1..90}; do
           if curl -s -f http://localhost > /dev/null; then
             echo "Services are up!"
-            break
+            exit 0
           fi
+          echo "Attempt $i failed, waiting..."
           sleep 2
         done
+        echo "Services failed to start within 180 seconds, showing logs:"
+        docker compose -f docker-compose.yml -f docker-compose.frontend.override.yml logs
+        exit 1
 
     - name: Run Smoke Tests
       run: bash scripts/smoke_tests.sh
